@@ -57,10 +57,7 @@ ValueNotifier<DateTime?> selecteddate = ValueNotifier<DateTime?>(null);
             selectedDate: selecteddate,
             onDateSelected: (selectedDate) {
               selecteddate.value = selectedDate;
-              setState(() {
-                
-              });
-              // Handle the selected date here
+
             },
             startyear: 2000,
             endyear: 2050,

@@ -5,15 +5,21 @@ import 'package:horizontal_calender_mz/horizontal_calender_mz.dart';
 
 void main() {
 testWidgets('horizontal_calendar minimal test', (WidgetTester tester) async {
+  ValueNotifier<DateTime?> selecteddate = ValueNotifier<DateTime?>(null);
   // Build the widget
   await tester.pumpWidget(
     MaterialApp(
       home: Scaffold(
         body: HorizontalCalenderMZ(
           key: const Key('horizontal_calendar'),
-          startyear: 2000,
-          endyear: 2050,
-          footer: true,
+          selectedDate: selecteddate,
+            onDateSelected: (selectedDate) {
+              selecteddate.value = selectedDate;
+
+            },
+            startyear: 2000,
+            endyear: 2050,
+            footer: true,
         ),
       ),
     ),
