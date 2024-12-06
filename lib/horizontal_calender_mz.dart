@@ -10,6 +10,7 @@ import 'apptext.dart';
 class HorizontalCalenderMZ extends StatefulWidget {
   HorizontalCalenderMZ(
       {super.key,
+      required this.selectedDate,
       this.header,
       this.selectedbgcolor,
       this.unselectedbgcolor,
@@ -17,10 +18,11 @@ class HorizontalCalenderMZ extends StatefulWidget {
       this.seldaynamecolor,
       this.seldaynumbercolor,
       this.unseldaynamecolor,
-      this.unseldaynumbercolor,this.selectedbordercolor,this.unselectedbordercolor,this.footer= false,this.footertext,this.footerstyle,this.startyear,this.endyear});
+      this.unseldaynumbercolor,this.selectedbordercolor,this.unselectedbordercolor,this.footer= false,this.footertext,this.footerstyle,this.startyear,this.endyear,this.onDateSelected});
   Widget? header, calendericon;
   bool? footer = false;
   int? startyear,endyear;
+  ValueChanged<DateTime>? onDateSelected;
   String? footertext;
   TextStyle? footerstyle;
   Color? selectedbgcolor,
@@ -29,6 +31,7 @@ class HorizontalCalenderMZ extends StatefulWidget {
       unseldaynamecolor,
       seldaynumbercolor,
       unseldaynumbercolor,selectedbordercolor,unselectedbordercolor;
+      ValueNotifier<DateTime?> selectedDate;
   @override
   State<HorizontalCalenderMZ> createState() => _HorizontalCalenderMZState();
 }
@@ -36,7 +39,6 @@ class HorizontalCalenderMZ extends StatefulWidget {
 class _HorizontalCalenderMZState extends State<HorizontalCalenderMZ> {
   final ScrollController _scrollController = ScrollController();
   DateTime localToday = DateTime.now();
-  ValueNotifier<DateTime?>? selectedDate = ValueNotifier<DateTime?>(null);
   late DateTime firstDayOfMonth;
   late DateTime lastDayOfMonth;
   var weekDayFormat = DateFormat('EEE');
@@ -67,17 +69,20 @@ class _HorizontalCalenderMZState extends State<HorizontalCalenderMZ> {
     final DateTime? picked = await showDatePicker(
       // barrierColor: ColorResources.WHITE,
       context: context,
-      initialDate: selectedDate?.value ?? DateTime.now(),
+      initialDate:widget. selectedDate.value ?? DateTime.now(),
       firstDate: DateTime(widget.startyear??2000),
       lastDate: DateTime(widget.endyear??2100),
     );
 
-    if (picked != null && picked != selectedDate) {
+    if (picked != null && picked != widget.selectedDate) {
       setState(() {
-        selectedDate?.value = picked;
+        widget.selectedDate.value = picked;
       });
     }
-    _updateMonthBounds(selectedDate?.value ?? DateTime.now());
+      if (widget.onDateSelected != null) {
+      widget.onDateSelected!(picked!);
+    }
+    _updateMonthBounds(widget.selectedDate.value ?? DateTime.now());
   }
 
   @override
@@ -134,24 +139,27 @@ class _HorizontalCalenderMZState extends State<HorizontalCalenderMZ> {
                                       onTap: () {
                                         // if (UserAccessFunctions.canSeeCashFlow()) {
                                         HapticFeedback.selectionClick();
-                                        (selectedDate?.value?.year ==
+                                        (widget.selectedDate.value?.year ==
                                                     date.year &&
-                                                selectedDate?.value?.month ==
+                                                widget.selectedDate.value?.month ==
                                                     date.month &&
-                                                selectedDate?.value?.day ==
+                                                widget.selectedDate.value?.day ==
                                                     date.day)
                                             ? null
                                             : setState(() {
-                                                selectedDate?.value = date;
+                                                widget.selectedDate.value = date;
                                               });
                                         DateTime currentDateTime =
-                                            selectedDate?.value ??
+                                            widget.selectedDate.value ??
                                                 DateTime.now();
                                         DateTime dateOnly = DateTime(
                                             currentDateTime.year,
                                             currentDateTime.month,
                                             currentDateTime.day);
-                                        selectedDate?.value = dateOnly;
+                                       widget. selectedDate.value = dateOnly;
+                                       if (widget.onDateSelected != null) {
+      widget.onDateSelected!(dateOnly);
+    }
                                         // }
                                       },
                                       child: Container(
@@ -159,19 +167,19 @@ class _HorizontalCalenderMZState extends State<HorizontalCalenderMZ> {
                                             borderRadius:
                                                 BorderRadius.circular(50),
                                             border: Border.all(
-                                                color: (selectedDate?.value?.year == date.year &&
-                                                        selectedDate?.value?.month ==
+                                                color: (widget.selectedDate.value?.year == date.year &&
+                                                        widget.selectedDate.value?.month ==
                                                             date.month &&
-                                                        selectedDate?.value?.day ==
+                                                        widget.selectedDate.value?.day ==
                                                             date.day)
                                                     ?widget.selectedbordercolor?? Colors.transparent
                                                     : widget.unselectedbordercolor?? const Color(0xFF9ca4a7)
                                                         .withOpacity(0.2)),
-                                            color: (selectedDate?.value?.year ==
+                                            color: (widget.selectedDate.value?.year ==
                                                         date.year &&
-                                                    selectedDate?.value?.month ==
+                                                    widget.selectedDate.value?.month ==
                                                         date.month &&
-                                                    selectedDate?.value?.day ==
+                                                    widget.selectedDate.value?.day ==
                                                         date.day)
                                                 ? widget.selectedbgcolor ??
                                                     const Color(0xFF1FA7FF)
@@ -189,13 +197,13 @@ class _HorizontalCalenderMZState extends State<HorizontalCalenderMZ> {
                                                 ),
                                                 AppText(
                                                   text: weekdaydata,
-                                                  color: (selectedDate?.value
+                                                  color: (widget.selectedDate.value
                                                                   ?.year ==
                                                               date.year &&
-                                                          selectedDate?.value
+                                                          widget.selectedDate.value
                                                                   ?.month ==
                                                               date.month &&
-                                                          selectedDate?.value
+                                                          widget.selectedDate.value
                                                                   ?.day ==
                                                               date.day)
                                                       ? widget.seldaynamecolor ??
@@ -212,16 +220,16 @@ class _HorizontalCalenderMZState extends State<HorizontalCalenderMZ> {
                                                       Alignment.bottomCenter,
                                                   decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
-                                                      color: (selectedDate
-                                                                      ?.value
+                                                      color: (widget.selectedDate
+                                                                      .value
                                                                       ?.year ==
                                                                   date.year &&
-                                                              selectedDate
-                                                                      ?.value
+                                                              widget.selectedDate
+                                                                      .value
                                                                       ?.month ==
                                                                   date.month &&
-                                                              selectedDate
-                                                                      ?.value
+                                                              widget.selectedDate
+                                                                      .value
                                                                       ?.day ==
                                                                   date.day)
                                                           ? Colors.white
@@ -234,17 +242,17 @@ class _HorizontalCalenderMZState extends State<HorizontalCalenderMZ> {
                                                       child: AppText(
                                                         text:
                                                             date.day.toString(),
-                                                        color: (selectedDate
-                                                                        ?.value
+                                                        color: (widget.selectedDate
+                                                                        .value
                                                                         ?.year ==
                                                                     date.year &&
-                                                                selectedDate
-                                                                        ?.value
+                                                                widget.selectedDate
+                                                                        .value
                                                                         ?.month ==
                                                                     date
                                                                         .month &&
-                                                                selectedDate
-                                                                        ?.value
+                                                                widget.selectedDate
+                                                                        .value
                                                                         ?.day ==
                                                                     date.day)
                                                             ? widget.seldaynumbercolor ??
@@ -274,10 +282,10 @@ class _HorizontalCalenderMZState extends State<HorizontalCalenderMZ> {
               height: 8,
             ),
             if(widget.footer==true)
-            (selectedDate?.value != null)
-                ? widget.footerstyle!=null? Text('${widget.footertext} ${getMonthName(selectedDate!.value!.month)} ${selectedDate!.value?.day.toString()}',style: widget.footerstyle,): AppText(
+            (widget.selectedDate.value != null)
+                ? widget.footerstyle!=null? Text('${widget.footertext} ${getMonthName(widget.selectedDate.value!.month)} ${widget.selectedDate.value?.day.toString()}',style: widget.footerstyle,): AppText(
                     text:
-                        '${widget.footertext??''} ${getMonthName(selectedDate!.value!.month)} ${selectedDate!.value?.day.toString()}',
+                        '${widget.footertext??''} ${getMonthName(widget.selectedDate.value!.month)} ${widget.selectedDate.value?.day.toString()}',
                     color: Colors.grey,
                     size: 12,
                     weight: FontWeight.w300,

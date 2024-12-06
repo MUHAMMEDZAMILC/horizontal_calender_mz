@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:horizontal_calender_mz/apptext.dart';
 import 'package:horizontal_calender_mz/horizontal_calender_mz.dart';
 
 void main() {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-
+  
   final String title;
 
   @override
@@ -34,7 +35,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
  
-
+ValueNotifier<DateTime?> selecteddate = ValueNotifier<DateTime?>(null);
   @override
   Widget build(BuildContext context) {
    
@@ -53,10 +54,19 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
            HorizontalCalenderMZ(
+            selectedDate: selecteddate,
+            onDateSelected: (selectedDate) {
+              selecteddate.value = selectedDate;
+              setState(() {
+                
+              });
+              // Handle the selected date here
+            },
             startyear: 2000,
             endyear: 2050,
             footer: true,
-            )
+            ),
+
           ],
         ),
       ),
