@@ -1,7 +1,7 @@
 name: horizontal_calender_mz
 description: "Horizontal Calender Custom Widget"
 version: 0.0.1
-homepage: https://github.com/MUHAMMEZAMILC/horizontal_calender_mz
+homepage: https://github.com/MUHAMMEDZAMILC/horizontal_calender_mz
 
 environment:
   sdk: ^3.5.3
