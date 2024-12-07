@@ -14,7 +14,7 @@
 Add this line to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  horizontal_calendar_mz: ^0.0.3
+  horizontal_calendar_mz: ^0.0.4
 ```
 
 ## Screenshot
