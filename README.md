@@ -15,3 +15,8 @@ Add this line to your `pubspec.yaml`:
 ```yaml
 dependencies:
   horizontal_calendar_mz: ^0.0.3
+```
+
+## Screenshot
+
+![Screenshot Description](https://github.com/MUHAMMEDZAMILC/horizontal_calender_mz/assets/screenshot/screenshot.png)
