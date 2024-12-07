@@ -19,4 +19,4 @@ dependencies:
 
 ## Screenshot
 
-![Screenshot Description](https://github.com/MUHAMMEDZAMILC/horizontal_calender_mz/assets/screenshot/screenshot.png)
+![Screenshot Description](https://github.com/MUHAMMEDZAMILC/horizontal_calender_mz/blob/main/assets/screenshot/screenshot.png)
